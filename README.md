@@ -2,15 +2,19 @@
 
 ## General Description
 
-This project will be stored and maintained in a GitHub private repository for now. We might make the repository public and open-source under MIT License (or other) depending on condition and contributors' agreement. Vision control will be done with git and managed by Ethan. There will be a general interface, or a middle layer, between the back-end classes and the GUI so that the same GUI program will run with different dice game (reach component) only depending on parameter passing and function calling. Settings and history (reach component) will be in JSON format, and data will be stored as CSV files.
+This project will be stored and maintained in a GitHub private repository for now. We might make the repository public and open-source under MIT License (or other) depending on condition and contributors' agreement. Vision control will be done with git and managed by Ethan. There will be a general interface, or a middle layer, between the back-end classes and the GUI so that the same GUI program will run with different dice game (reach component) only depending on parameter passing and function calling. Settings and history (reach component) will be in JSON format, and data will be stored as CSV files. During the game, the opponent’s score will be hidden.
 
 ### Members
 
 * **Team Name**: Dice Game Group 6
-* **Ethan He**: back-end developer who designs interface and abstraction. Also responsible for  functions under all the general abstract classes and data storage management.
+* **Ethan He**: back-end developer who designs interface and abstraction. Also responsible for  functions under all the general abstract classes and data storage management. He will accompany one other contributor to write up the documentations.
 * **Jingqiu Huang**
-* **Xuan Huang**
+* **Xuan Huang**:  programmer who develops game code and structure, also deals with group coordination.
 * Yangqing Zhang (not responding)
+
+### Video
+
+When the whole game’s code is finished and run as desired, we will hold a zoom meeting in the group to record the final video, which will mainly include two parts. First of all, we will introduce our whole project, from the initial idea to the final result we get. We will explain every group member’s contribution, the dilemma we faced, and how we overcome those difficulties in detail. In the second part of the video, we will run a demo to show the whole process of the game we designed and how it works. In the end, the video will be both uploaded to YouTube and submitted to Canvas as part of the project work.
 
 ## Project Description
 
@@ -26,6 +30,8 @@ This general game flow will be as following
 * 3 subgames with variable difficulty level.
 * Gaming history for users to check.
 * If playing with the same people again, the players can choose to continue where they left off (if the game is not finished last time and is saved).
+* Pause function that will tell the other player to take a break.
+
 
 ### Time Line
 
