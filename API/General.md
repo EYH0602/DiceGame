@@ -30,9 +30,7 @@ Constructor who creates a Player object.
     ```matlab
     >> p1 = Player(0)
     
-    ```
-
-p1 = 
+    p1 =
     
       Player with properties:
     
