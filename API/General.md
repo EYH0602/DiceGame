@@ -2,7 +2,7 @@
 
 * [Player](# Player)
 * [Dice](# Dice)
-* [Dice Game](# DiceGame)
+* [DiceGame](# DiceGame)
 * [Subgame](# Subgame)
 
 
@@ -13,7 +13,7 @@
 
 |property|type|usage|
 |:--|:--|:--|
-|ID|Integer|1or 2, telling which play this is|
+|ID|Integer|1 or 2, telling which play this is|
 |score|Integer|0-100, default is 0.|
 |name|string|nickname entered by the player|
 
@@ -103,11 +103,28 @@ Convert the player object to a JSON object with all the current status.
 
 
 
-# DiceGame
+# Game
+
+## Properties
+
+|property|type|usage|
+|:--|:--|:--|
+|numDice|Integer|how many dices are used in this game|
+|DiceGame
+
+## Methods
+
+### `Game(choice)`
 
 
 
-# Subgame
+# Minesweeper
+
+### `status newClick(x, y)`
+
+**Input**: coordinate of player's new click
+
+**Output**: 
 
 
 

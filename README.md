@@ -33,7 +33,14 @@ This general game flow will be as following
 * Pause function that will tell the other player to take a break.
 
 
-### Time Line
+## Rule
+
+For each round
+
+1. If the play has 5 distinct dice, the his point is the highest die + the lowest die
+2. Otherwise their score is the sum of all dice with same number
+3. The player with higher points in this round can add their points to score
+4. if the points for this round is the same, both players earn the points.
 
 
 

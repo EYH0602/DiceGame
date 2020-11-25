@@ -1,4 +1,15 @@
 {
-    "name": "eeeh",
-    "score": 35
+    "class": "Player",
+    "property": {
+        "ID": 1,
+        "name": "eeeh",
+        "score": 35
+    },
+    "functions": {
+        "Player": {
+            "parameters": {
+
+            }
+        }
+    }
 }
