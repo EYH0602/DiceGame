@@ -10,12 +10,12 @@ classdef DiceGame
     end
 
     properties (Access = private)
-        ID;     % id of this client, 1 or 2
-        score;  % score of this client
-        pointThisRound;  % boolean, currently believe or not
-        name;   % user name of this client
+        ID; % id of this client, 1 or 2
+        score; % score of this client
+        pointThisRound; % boolean, currently believe or not
+        name; % user name of this client
         status; % char array of json, game status, sync from server
-        dice;   % vector of 5 Dice objects
+        dice; % vector of 5 Dice objects
     end
 
     methods (Access = public)
@@ -33,17 +33,18 @@ classdef DiceGame
                     Dice()
                     Dice()
                     ];
-            obj.status = char(thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable').desp);
+            % obj.status = char(thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable').desp);
             if nargin == 2
                 obj.name = name;
             end
+
         end
 
         function isMyRound = isMyRound(obj)
             readStatus = thingSpeakRead(obj.CHANNEL_ID, 'Fields', 1, 'ReadKey', obj.READ_KEY);
             isMyRound = (readStatus == obj.ID);
         end
-        
+
         function ID = getID(obj)
             ID = obj.ID;
         end
@@ -72,12 +73,14 @@ classdef DiceGame
             disp(obj.status)
             disp("====");
             s = jsondecode(obj.status);
+
             switch obj.ID
-            case 1
-                opponentDice = s.client2.dice;
-            case 2
-                opponentDice = s.client1.dice;
+                case 1
+                    opponentDice = s.client2.dice;
+                case 2
+                    opponentDice = s.client1.dice;
             end
+
             myPoint = getListPoint(obj.dice);
             opponentPoint = getListPoint(opponentDice);
 
@@ -90,30 +93,43 @@ classdef DiceGame
             if myPoint >= opponentPoint
                 obj.score = obj.score + myPoint;
             end
+
         end
 
         % =============================================
         %       Dice Functions
         % =============================================
+        function obj = setDieFront(obj, index, num)
+            % add the ith die to num
+            obj.dice(index) = obj.dice(index).setFront(num);
+        end
+
         function dice = getDice(obj, index)
 
             switch nargin
                 case 1
-                    dice = obj.dice.getFront();
+                    dice = obj.dice;
                 case 2
                     dice = obj.dice(index);
             end
 
         end
 
-        function diceFronts = getDiceFronts(obj, index)
+        function str = getDiceStr(obj)
+            str = "";
+            for i = 1:5
+                str = str + string(obj.dice(i).getFront()) + "    ";
+            end
+        end
 
+        function diceFronts = getDiceFronts(obj, index)
+            diceFronts = [];
             switch nargin
                 case 1
-                    diceFronts = zeros(1, 5); %   as defined, there are only 5 dices
+                    % diceFronts = zeros(1, 5); %   as defined, there are only 5 dices
 
                     for i = 1:5
-                        diceFronts(i) = obj.dice(i).getFront();
+                        diceFronts(end+1) = obj.dice(i).getFront();
                     end
 
                 case 2
@@ -135,7 +151,7 @@ classdef DiceGame
             for i = 1:t
 
                 for j = 1:5
-                    obj.dice(i) = obj.dice(i).roll();
+                    obj.dice(j) = obj.dice(j).roll();
                 end
 
             end
@@ -150,48 +166,7 @@ classdef DiceGame
             json_txt = jsonencode(s);
         end
 
-        % =============================================
-        %       Server factions
-        % =============================================
-        function obj = syncUp(obj)
-            % disp("====");
-            disp(obj.status)
-            % disp("====");
-            % return;
-            gameStatus = jsondecode(obj.status)
-            % theOtherPlayID = 0;
-
-
-            switch obj.ID
-                case 1
-                    if isempty(gameStatus.client1.name)
-                        gameStatus.client1.name = obj.name;
-                    end
-                    gameStatus.client1.score = obj.score;
-                    gameStatus.client1.dice = obj.dice;
-                    theOtherPlayID = 2;
-                case 2
-                    if isempty(gameStatus.client2.name)
-                        gameStatus.client2.name = obj.name;
-                    end
-                    gameStatus.client2.score = obj.score;
-                    gameStatus.client2.dice = obj.dice;
-                    theOtherPlayID = 1;
-            end
-
-            % disp(gameStatus.client1.dice(1).getFront());
-            obj.status = jsonencode(gameStatus);
-            % disp("***");
-            % disp(obj.status);
-            thingSpeakWrite(obj.CHANNEL_ID, {theOtherPlayID, obj.status}, 'WriteKey', obj.WRITE_KEY);
-            % disp("***");
-            pause(15);
-        end
-
-        function obj = syncDown(obj)
-            readStatus = thingSpeakRead(obj.CHANNEL_ID,'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable');
-            obj.status = char(readStatus.desp)
-        end
+        
 
     end
 
