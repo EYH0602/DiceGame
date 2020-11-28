@@ -37,7 +37,7 @@ This general game flow will be as following
 
 ## Rule
 
-For each round, each round, both players roll their 5 dice. The 5 new rolled dice (as numerical array) will be pushed to the player's record stack, and the record stack will be calculated for points of this round.
+For each round, each round, both players roll their 5 dice. The 5 new rolled dice (as numerical array) will be **loaded on** the player's record stack, and the record stack will be calculated for points of this round.
 
 1. After rolled, a random die of this 5 dice will be added by a random number.
 2. the points get in this round is the length of the longest strictly increasing subsequence (`src/lengthLIS.m`).
