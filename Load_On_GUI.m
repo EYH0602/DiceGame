@@ -1,0 +1,4 @@
+
+addpath src
+
+game = GameGUI;
