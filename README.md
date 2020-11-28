@@ -1,4 +1,7 @@
-# Final Project Proposal
+# Load On Dice Game
+
+* [Rule](## Rule)
+* [Usage](## Usage)
 
 ## General Description
 
@@ -32,18 +35,20 @@ This general game flow will be as following
 * If playing with the same people again, the players can choose to continue where they left off (if the game is not finished last time and is saved).
 * Pause function that will tell the other player to take a break.
 
-
 ## Rule
 
-For each round
+For each round, each round, both players roll their 5 dice. The 5 new rolled dice (as numerical array) will be pushed to the player's record stack, and the record stack will be calculated for points of this round.
 
-1. If the play has 5 distinct dice, the his point is the highest die + the lowest die
-2. Otherwise their score is the sum of all dice with same number
-3. The player with higher points in this round can add their points to score
-4. if the points for this round is the same, both players earn the points.
+1. After rolled, a random die of this 5 dice will be added by a random number.
+2. the points get in this round is the length of the longest strictly increasing subsequence (`src/lengthLIS.m`).
+3. The player who has the higher points in this round, the points they get in this round will be added to their total score. The other player gets nothing for this round.
 
+## Usage
 
-
+```matlab
+run('Load_On_GUI.m')	% run the GUI version of this game
+run('Load_On_CLI.m')	% run the CLI version of this game, currently not supported
+```
 
 
 
