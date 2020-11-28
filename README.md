@@ -1,7 +1,7 @@
 # Load On Dice Game
 
-* [Rule](## Rule)
-* [Usage](## Usage)
+* [Rule](##Rule)
+* [Usage](##Usage)
 
 ## General Description
 
