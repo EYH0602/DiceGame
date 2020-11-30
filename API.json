@@ -1,0 +1,91 @@
+{
+    "class": {
+        "Dice": {
+            "properties": {
+                "frontFace": "Integer, 1-6"
+            },
+            "functions": {
+                "Dice()": {
+                    "input": {
+                        "frontFace_arg": "Integer, initialize the die to this number"
+                    },
+                    "output": {
+                        "obj": "initialized die"
+                    },
+                    "description": "constructor"
+                },
+                "roll()": {
+                    "input": null,
+                    "output": {
+                        "obj": "die after rolled"
+                    },
+                    "description": "roll the die to a random number 1-6"
+                }
+            }
+        },
+        "DiceGame": {
+            "properties": {
+                "ID": "Integer, id of this client, 1 or 2",
+                "dice": "List of 5 Dice object, user's dice of this round."
+            },
+            "functions": {
+                "DiceGame()": {
+                    "input": {
+                        "ID": "* Integer, user id",
+                        "name": "String, user name"
+                    },
+                    "output": {
+                        "obj": "initialized DiceGame object"
+                    },
+                    "description": "constructor"
+                },
+                "setDieFront()": {
+                    "input": {
+                        "index": "* Integer (1-5): which die you want to change",
+                        "num": "* Integer, set the die to this value"
+                    },
+                    "output": {
+                        "obj": "DiceGame object after this action"
+                    },
+                    "description": "set one die to some value"
+                },
+                "getDiceStr()": {
+                    "input": null,
+                    "output": {
+                        "str": "String, all 5 dice in string format"
+                    },
+                    "description": "get the dices in string"
+                },
+                "getDiceFronts()": {
+                    "input": {
+                        "index": "Integer, get the die at this index"
+                    },
+                    "output": {
+                        "diceFronts": "Integer Vector, all fronts of desired dice"
+                    },
+                    "description": "get the fronts (number) of dices"
+                },
+                "rollAllDice()": {
+                    "input": {
+                        "rollTimes": "Integer, roll the dice for this many times"
+                    },
+                    "output": {
+                        "obj": "DiceGame object, after roll its dice"
+                    },
+                    "description": "roll all the dice (get new random number)"
+                }
+            }
+        }
+    },
+    "functions": {
+        "lengthOfLIS()": {
+            "input": {
+                "nums": "Integer Vector, a sequence of numbers"
+            },
+            "output": {
+                "maxres": "Integer, the length of longest increasing subsequence in this sequence of numbers"
+            },
+            "description": "calculate the points of current round"
+        }
+    }
+}
