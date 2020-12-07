@@ -43,6 +43,12 @@ For each round, each round, both players roll their 5 dice. The 5 new rolled dic
 2. the points get in this round is the length of the longest strictly increasing subsequence (`src/lengthLIS.m`).
 3. The player who has the higher points in this round, the points they get in this round will be added to their total score. The other player gets nothing for this round.
 
+### Subgame
+
+* The play will enter the subgame (minesweeper) when their score is a multiple of 10, the other player will be waiting.
+* If the player **solve** the minesweeper subgame, his total score will be ==added by 14==.
+* If the player **fail to solve** the minesweeper, his total score will be ==subtracted by 33==.
+
 ## Usage
 
 ```matlab

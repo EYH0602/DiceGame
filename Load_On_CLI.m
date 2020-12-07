@@ -60,16 +60,28 @@ addpath src
 %     game = game.addScore(5);
 % end
 
-game = DiceGame(1,"eeeh");
-disp(game.getDiceFronts());
-diceArr = game.getDice();
-for i = 1:5
-    disp(diceArr(i).getFront());
+% game = DiceGame(1,"eeeh");
+% disp(game.getDiceFronts());
+% diceArr = game.getDice();
+% for i = 1:5
+%     disp(diceArr(i).getFront());
+% end
+
+% game = game.rollAllDice();
+% disp(game.getDiceFronts());
+% diceArr = game.getDice();
+% for i = 1:5
+%     disp(diceArr(i).getFront());
+% end
+
+subgame = Minesweeper();
+while (subgame.isGameOver == false)
+    % Flush graphics (if you want to watch the engine's progress)
+    drawnow;
+    
+    % % Get encoded board state
+    % nMines = subgame.nMines; % Total # mines in the puzzle
+    % board = subgame.GetBoardState(); % Current board state
 end
 
-game = game.rollAllDice();
-disp(game.getDiceFronts());
-diceArr = game.getDice();
-for i = 1:5
-    disp(diceArr(i).getFront());
-end
+disp(subgame.isSolved);

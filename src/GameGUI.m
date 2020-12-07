@@ -64,6 +64,27 @@ classdef GameGUI < matlab.apps.AppBase
             app.Player2ScoreEditField.Value = otherPlayerPoint;   % will get this from server in the future
             % show the result in GUI
             app.displayDice(points);
+  
+            % ====================================== enter subgame ===================================================
+            winSubgame = false;
+            enteredSubgame = false;
+            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value, 10) == 0   % if get multiple of 10, enter the subgame
+                enteredSubgame = true;
+                subgame = Minesweeper();
+                while ~subgame.isGameOver % wait until the subgame is finished
+                    % display Minesweeper GUI
+                    drawnow;
+                end
+                winSubgame = subgame.isSolved;
+            end
+            % calculate result after subgame: win +14, lost -23
+            if enteredSubgame
+                if winSubgame
+                    app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + 14;
+                else
+                    app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 23;
+                end
+            end
         end
     end
 
