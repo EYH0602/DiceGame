@@ -51,7 +51,12 @@ classdef GameGUI < matlab.apps.AppBase
             
             
             % roll all the dice
-            [xr,fs]=audioread('./music/ShakeAndRollDice.mp3'); % init sound
+            currPath = pwd; % identify the current working directory to avoid wrong path to sound file
+            pathToSoundFile = './music/ShakeAndRollDice.mp3';
+            if string(currPath(end-2:end)) == "src"
+                pathToSoundFile = '../music/ShakeAndRollDice.mp3';
+            end
+            [xr,fs]=audioread(pathToSoundFile); % init sound
             sound(xr,fs);
             app.game = app.game.rollAllDice();
             
@@ -65,7 +70,7 @@ classdef GameGUI < matlab.apps.AppBase
             points = lengthOfLIS(app.diceRecord);
             % show the result in GUI
             app.displayDice(points);
-            % sp=actxserver('SAPI.SpVoice');  % has run-time error
+            % sp=actxserver('SAPI.SpVoice');  
             
             app.game.updateRound(points);   % send the points of this round to server
             app.game.updateStatus(1);
