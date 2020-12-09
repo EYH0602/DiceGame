@@ -48,11 +48,13 @@ classdef GameGUI < matlab.apps.AppBase
         % Button pushed function: ROLLButton
         function ROLLButtonPushed(app, event)
             
-            % prepare to roll the dice
-            app.game.updateStatus(0);
+            
             
             % roll all the dice
+            [xr,fs]=audioread('./music/ShakeAndRollDice.mp3'); % init sound
+            sound(xr,fs);
             app.game = app.game.rollAllDice();
+            
             % add a random number to an random index
             i = randi([1,5],1,1);
             num = randi([-10,10],1,1);
@@ -63,10 +65,12 @@ classdef GameGUI < matlab.apps.AppBase
             points = lengthOfLIS(app.diceRecord);
             % show the result in GUI
             app.displayDice(points);
+            % sp=actxserver('SAPI.SpVoice');  % has run-time error
             
             app.game.updateRound(points);   % send the points of this round to server
             app.game.updateStatus(1);
             app.game.waitForOtherPlayer();
+            app.game.updateStatus(0);
             
             % calculate the global score
             otherPlayerPoint = app.game.getOtherPlayerRoundPoint();
@@ -82,6 +86,7 @@ classdef GameGUI < matlab.apps.AppBase
             winSubgame = false;
             enteredSubgame = false;
             if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,10) == 0   % if get multiple of 10, enter the subgame
+                sp.Speak('Minesweeper starts. Good luck');
                 enteredSubgame = true;
                 subgame = Minesweeper();
                 while ~subgame.isGameOver % wait until the subgame is finished
@@ -94,9 +99,16 @@ classdef GameGUI < matlab.apps.AppBase
             if enteredSubgame
                 if winSubgame
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + 14;
+                    sp.Speak('Nice，You did a great job');
                 else
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 33;
+                    sp.Speak('Don''t lose heart, keep up the good work');
                 end
+            end
+            
+            if (app.Player1ScoreEditField.Value >=100||app.Player2ScoreEditField.Value >=100)
+                load handel;
+                sound(y,Fs);
             end
             
             % update scores to the server
