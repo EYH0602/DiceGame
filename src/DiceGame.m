@@ -4,9 +4,10 @@ classdef DiceGame
     %       Interaction Keys to ThingSpeak
     % =============================================
     properties (Constant)
-        WRITE_KEY = 'BJ0V9DMXEXXEH6QT';
-        READ_KEY = '0KXU1T6U20YA4DYJ';
-        CHANNEL_ID = 1236394;
+        WRITE_KEY = 'TS5IXZHX5UWGCWQE';
+        READ_KEY = 'F6M5NKR91J9RRSBD';
+        CHANNEL_ID = 1252481;
+        delay = 5;
     end
 
     properties (Access = private)
@@ -68,33 +69,33 @@ classdef DiceGame
             obj.score = obj.score + num;
         end
 
-        function obj = getResults(obj)
-            disp("====");
-            disp(obj.status)
-            disp("====");
-            s = jsondecode(obj.status);
+        % function obj = getResults(obj)
+        %     disp("====");
+        %     disp(obj.status)
+        %     disp("====");
+        %     s = jsondecode(obj.status);
 
-            switch obj.ID
-                case 1
-                    opponentDice = s.client2.dice;
-                case 2
-                    opponentDice = s.client1.dice;
-            end
+        %     switch obj.ID
+        %         case 1
+        %             opponentDice = s.client2.dice;
+        %         case 2
+        %             opponentDice = s.client1.dice;
+        %     end
 
-            myPoint = getListPoint(obj.dice);
-            opponentPoint = getListPoint(opponentDice);
+        %     myPoint = getListPoint(obj.dice);
+        %     opponentPoint = getListPoint(opponentDice);
 
-            % display the points and dice
-            disp("My dice, point = " + string(myPoint));
-            disp(obj.dice);
-            disp("Opponent's Dice, point = " + string(opponentPoint));
-            disp(opponentDice);
+        %     % display the points and dice
+        %     disp("My dice, point = " + string(myPoint));
+        %     disp(obj.dice);
+        %     disp("Opponent's Dice, point = " + string(opponentPoint));
+        %     disp(opponentDice);
 
-            if myPoint >= opponentPoint
-                obj.score = obj.score + myPoint;
-            end
+        %     if myPoint >= opponentPoint
+        %         obj.score = obj.score + myPoint;
+        %     end
 
-        end
+        % end
 
         % =============================================
         %       Dice Functions
@@ -117,19 +118,22 @@ classdef DiceGame
 
         function str = getDiceStr(obj)
             str = "";
+
             for i = 1:5
                 str = str + string(obj.dice(i).getFront()) + "    ";
             end
+
         end
 
         function diceFronts = getDiceFronts(obj, index)
             diceFronts = [];
+
             switch nargin
                 case 1
                     % diceFronts = zeros(1, 5); %   as defined, there are only 5 dices
 
                     for i = 1:5
-                        diceFronts(end+1) = obj.dice(i).getFront();
+                        diceFronts(end + 1) = obj.dice(i).getFront();
                     end
 
                 case 2
@@ -166,7 +170,109 @@ classdef DiceGame
             json_txt = jsonencode(s);
         end
 
-        
+        % =============================================
+        %       ThingSpeak
+        % =============================================
+        function updateRound(obj, roundPoints)
+            arr = obj.getNewServerArr(obj.ID, roundPoints);
+            thingSpeakWrite(obj.CHANNEL_ID, arr, 'WriteKey', obj.WRITE_KEY);
+            pause(obj.delay);
+        end
+
+        function updateGlobalScore(obj, score)
+            arr = obj.getNewServerArr(obj.ID + 2, score);
+            thingSpeakWrite(obj.CHANNEL_ID, arr, 'WriteKey', obj.WRITE_KEY);
+            pause(obj.delay);
+            % pause(obj.delay);
+            % thingSpeakWrite(obj.CHANNEL_ID, 'Field', obj.ID+2, 'Values', score, 'WriteKey', obj.WRITE_KEY);
+        end
+
+        function updateStatus(obj, status)
+            arr = obj.getNewServerArr(obj.ID + 4, status);
+            pause(obj.delay);
+            thingSpeakWrite(obj.CHANNEL_ID, arr, 'WriteKey', obj.WRITE_KEY);
+            pause(obj.delay);
+            %     pause(obj.delay);
+            %     thingSpeakWrite(obj.CHANNEL_ID, 'Field', obj.ID+4, 'Values', status, 'WriteKey', obj.WRITE_KEY);
+        end
+
+        function initServer(obj)
+            thingSpeakWrite(obj.CHANNEL_ID, {0, 0, 0, 0, 0, 0}, 'WriteKey', obj.WRITE_KEY);
+            pause(obj.delay);
+        end
+
+        function otherPlayerRoundPoint = getOtherPlayerRoundPoint(obj)
+            % pause(obj.delay);
+            otherPlayerRoundPoint = 0;
+            readStatus = thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable');
+
+            switch obj.ID
+                case 1
+                    otherPlayerRoundPoint = readStatus.player2Round;
+                case 2
+                    otherPlayerRoundPoint = readStatus.player1Round;
+            end
+
+            % pause(obj.delay);
+        end
+
+        function otherPlayerScore = getOtherPlayerScore(obj)
+            % pause(obj.delay);
+            otherPlayerScore = 0;
+            readStatus = thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable');
+
+            switch obj.ID
+                case 1
+                    otherPlayerScore = readStatus.player2Global;
+                case 2
+                    otherPlayerScore = readStatus.player1Global;
+            end
+
+            % pause(obj.delay);
+        end
+
+        function serverStatus = getServerStatus(obj)
+            % pause(obj.delay);
+            serverStatus = thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable');
+            % pause(obj.delay);
+        end
+
+        function cellarr = getNewServerArr(obj, index, newValue)
+            % pause(obj.delay);
+            serverStatus = thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'table');
+            arr = [
+                serverStatus.player1Round
+                serverStatus.player2Round
+                serverStatus.player1Global
+                serverStatus.player2Global
+                serverStatus.player1Status
+                serverStatus.player2Status
+                ];
+            arr(index) = newValue;
+            cellarr = {
+                    arr(1), ...
+                        arr(2), ...
+                        arr(3), ...
+                        arr(4), ...
+                        arr(5), ...
+                        arr(6)
+                    };
+            % pause(obj.delay);
+        end
+
+        function waitForOtherPlayer(obj)
+            readStatus = thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable');
+
+            while ~(readStatus.player1Status == 1 && readStatus.player2Status == 1)
+                % pause(obj.delay);
+                readStatus = thingSpeakRead(obj.CHANNEL_ID, 'ReadKey', obj.READ_KEY, 'OutputFormat', 'timetable');
+                disp("--------- Waiting ------------"); % for testing
+                disp(readStatus.player1Status);
+                disp(readStatus.player2Status);
+                disp("------------------------------");
+            end
+
+        end
 
     end
 
