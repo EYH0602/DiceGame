@@ -47,6 +47,10 @@ classdef GameGUI < matlab.apps.AppBase
 
         % Button pushed function: ROLLButton
         function ROLLButtonPushed(app, event)
+            
+            % prepare to roll the dice
+            app.game.updateStatus(0);
+            
             % roll all the dice
             app.game = app.game.rollAllDice();
             % add a random number to an random index
@@ -57,18 +61,27 @@ classdef GameGUI < matlab.apps.AppBase
             app.diceRecord = [app.diceRecord app.game.getDiceFronts()];
             % calculate the points get from current record
             points = lengthOfLIS(app.diceRecord);
-            otherPlayerPoint = randi([1,10],1,1);   % currently use random as place holder, will get this from server (ThingSpeak) in the future
+            % show the result in GUI
+            app.displayDice(points);
+            
+            app.game.updateRound(points);   % send the points of this round to server
+            app.game.updateStatus(1);
+            app.game.waitForOtherPlayer();
+            
+            % calculate the global score
+            otherPlayerPoint = app.game.getOtherPlayerRoundPoint();
             if (points > otherPlayerPoint)
                 app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + points;
             end
-            app.Player2ScoreEditField.Value = otherPlayerPoint;   % will get this from server in the future
-            % show the result in GUI
-            app.displayDice(points);
-  
-            % ====================================== enter subgame ===================================================
+            app.Player2ScoreEditField.Value = app.game.getOtherPlayerScore();   % read other player's score from server
+            
+            
+            
+            
+            % ================================================= enter subgame =================================================================
             winSubgame = false;
             enteredSubgame = false;
-            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value, 10) == 0   % if get multiple of 10, enter the subgame
+            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,10) == 0   % if get multiple of 10, enter the subgame
                 enteredSubgame = true;
                 subgame = Minesweeper();
                 while ~subgame.isGameOver % wait until the subgame is finished
@@ -77,14 +90,18 @@ classdef GameGUI < matlab.apps.AppBase
                 end
                 winSubgame = subgame.isSolved;
             end
-            % calculate result after subgame: win +14, lost -23
+            % calculate result after subgame: win +14, lost -33
             if enteredSubgame
                 if winSubgame
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + 14;
                 else
-                    app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 23;
+                    app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 33;
                 end
             end
+            
+            % update scores to the server
+            app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
+            
         end
     end
 
