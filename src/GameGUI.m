@@ -16,6 +16,7 @@ classdef GameGUI < matlab.apps.AppBase
         YourPlayerIDisButtonGroup       matlab.ui.container.ButtonGroup
         Player1Button                   matlab.ui.control.ToggleButton
         Player2Button                   matlab.ui.control.ToggleButton
+        Image                           matlab.ui.control.Image
     end
 
     
@@ -51,6 +52,8 @@ classdef GameGUI < matlab.apps.AppBase
             if app.Player2Button.Value == true
                 app.game = app.game.setID(2);
             end
+            % gif is not shown until roll botton pushed
+            app.Image.Visible = 'off';
         end
 
         % Button pushed function: ROLLButton
@@ -61,7 +64,11 @@ classdef GameGUI < matlab.apps.AppBase
             % roll all the dice
             [xr,fs]=audioread('./music/ShakeAndRollDice.mp3'); % init sound
             sound(xr,fs);
-            app.game = app.game.rollAllDice();
+            % make gif visiable
+            app.Image.Visible = 'on';
+            pause(1);
+            app.Image.Visible = 'off';
+            
             
             % add a random number to an random index
             i = randi([1,5],1,1);
@@ -73,7 +80,9 @@ classdef GameGUI < matlab.apps.AppBase
             points = lengthOfLIS(app.diceRecord);
             % show the result in GUI
             app.displayDice(points);
-            % sp=actxserver('SAPI.SpVoice');  
+            % sp=actxserver('SAPI.SpVoice');
+            
+             %app.Image.Visible = 'off';
             
             app.game.updateRound(points);   % send the points of this round to server
             app.game.updateStatus(1);
@@ -126,7 +135,7 @@ classdef GameGUI < matlab.apps.AppBase
             
             % update scores to the server
             app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
-            
+           
         end
     end
 
@@ -138,64 +147,64 @@ classdef GameGUI < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
-            app.UIFigure.Position = [100 100 584 571];
+            app.UIFigure.Position = [100 100 704 809];
             app.UIFigure.Name = 'MATLAB App';
 
             % Create ROLLButton
             app.ROLLButton = uibutton(app.UIFigure, 'push');
             app.ROLLButton.ButtonPushedFcn = createCallbackFcn(app, @ROLLButtonPushed, true);
-            app.ROLLButton.Position = [267 85 217 81];
+            app.ROLLButton.Position = [255 136 217 81];
             app.ROLLButton.Text = 'ROLL!';
 
             % Create Player1ScoreEditFieldLabel
             app.Player1ScoreEditFieldLabel = uilabel(app.UIFigure);
             app.Player1ScoreEditFieldLabel.HorizontalAlignment = 'right';
-            app.Player1ScoreEditFieldLabel.Position = [255 376 88 22];
+            app.Player1ScoreEditFieldLabel.Position = [255 614 88 22];
             app.Player1ScoreEditFieldLabel.Text = 'Player 1 Score:';
 
             % Create Player1ScoreEditField
             app.Player1ScoreEditField = uieditfield(app.UIFigure, 'numeric');
-            app.Player1ScoreEditField.Position = [249 355 100 22];
+            app.Player1ScoreEditField.Position = [249 593 100 22];
 
             % Create Play1PreviousRollsListBoxLabel
             app.Play1PreviousRollsListBoxLabel = uilabel(app.UIFigure);
             app.Play1PreviousRollsListBoxLabel.HorizontalAlignment = 'right';
-            app.Play1PreviousRollsListBoxLabel.Position = [32 446 119 22];
+            app.Play1PreviousRollsListBoxLabel.Position = [32 684 119 22];
             app.Play1PreviousRollsListBoxLabel.Text = 'Play 1 Previous Rolls';
 
             % Create Play1PreviousRollsListBox
             app.Play1PreviousRollsListBox = uilistbox(app.UIFigure);
-            app.Play1PreviousRollsListBox.Position = [19 19 171 424];
+            app.Play1PreviousRollsListBox.Position = [19 257 171 424];
 
             % Create THISROLLEditFieldLabel
             app.THISROLLEditFieldLabel = uilabel(app.UIFigure);
             app.THISROLLEditFieldLabel.HorizontalAlignment = 'right';
-            app.THISROLLEditFieldLabel.Position = [340 278 71 22];
+            app.THISROLLEditFieldLabel.Position = [340 516 71 22];
             app.THISROLLEditFieldLabel.Text = 'THIS ROLL!';
 
             % Create THISROLLEditField
             app.THISROLLEditField = uieditfield(app.UIFigure, 'text');
-            app.THISROLLEditField.Position = [228 201 295 78];
+            app.THISROLLEditField.Position = [228 439 295 78];
 
             % Create HTML
             app.HTML = uihtml(app.UIFigure);
             app.HTML.HTMLSource = '<center><h1> Load On Dice Game</h1></center>';
-            app.HTML.Position = [61 449 475 66];
+            app.HTML.Position = [61 687 475 66];
 
             % Create Player2ScoreEditFieldLabel
             app.Player2ScoreEditFieldLabel = uilabel(app.UIFigure);
             app.Player2ScoreEditFieldLabel.HorizontalAlignment = 'right';
-            app.Player2ScoreEditFieldLabel.Position = [416 376 88 22];
+            app.Player2ScoreEditFieldLabel.Position = [416 614 88 22];
             app.Player2ScoreEditFieldLabel.Text = 'Player 2 Score:';
 
             % Create Player2ScoreEditField
             app.Player2ScoreEditField = uieditfield(app.UIFigure, 'numeric');
-            app.Player2ScoreEditField.Position = [410 355 100 22];
+            app.Player2ScoreEditField.Position = [410 593 100 22];
 
             % Create YourPlayerIDisButtonGroup
             app.YourPlayerIDisButtonGroup = uibuttongroup(app.UIFigure);
             app.YourPlayerIDisButtonGroup.Title = 'Your Player ID is:';
-            app.YourPlayerIDisButtonGroup.Position = [285 394 196 54];
+            app.YourPlayerIDisButtonGroup.Position = [285 632 196 54];
 
             % Create Player1Button
             app.Player1Button = uitogglebutton(app.YourPlayerIDisButtonGroup);
@@ -207,6 +216,12 @@ classdef GameGUI < matlab.apps.AppBase
             app.Player2Button = uitogglebutton(app.YourPlayerIDisButtonGroup);
             app.Player2Button.Text = 'Player 2';
             app.Player2Button.Position = [96 3 100 22];
+
+            % Create Image
+            app.Image = uiimage(app.UIFigure);
+            app.Image.Visible = 'off';
+            app.Image.Position = [223 240 305 181];
+            app.Image.ImageSource = 'Dice_Animation.gif';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
