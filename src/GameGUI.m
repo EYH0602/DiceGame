@@ -17,6 +17,9 @@ classdef GameGUI < matlab.apps.AppBase
         Player1Button                   matlab.ui.control.ToggleButton
         Player2Button                   matlab.ui.control.ToggleButton
         Image                           matlab.ui.control.Image
+        OurWebsiteButton                matlab.ui.control.Button
+        ReadmeDescriptionButton         matlab.ui.control.Button
+        AcknoledgementButton            matlab.ui.control.Button
     end
 
     
@@ -144,6 +147,21 @@ classdef GameGUI < matlab.apps.AppBase
             % app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
            
         end
+
+        % Button pushed function: OurWebsiteButton
+        function OurWebsiteButtonPushed(app, event)
+            web('https://eyh0602.github.io/DiceGame/DiceGame_index.html')
+        end
+
+        % Button pushed function: ReadmeDescriptionButton
+        function ReadmeDescriptionButtonPushed(app, event)
+            web('https://eyh0602.github.io/DiceGame/DiceGame_description.html')
+        end
+
+        % Button pushed function: AcknoledgementButton
+        function AcknoledgementButtonPushed(app, event)
+            web('https://eyh0602.github.io/DiceGame/acknoledgemen.html')
+        end
     end
 
     % Component initialization
@@ -229,6 +247,24 @@ classdef GameGUI < matlab.apps.AppBase
             app.Image.Visible = 'off';
             app.Image.Position = [223 240 305 181];
             app.Image.ImageSource = 'Dice_Animation.gif';
+
+            % Create OurWebsiteButton
+            app.OurWebsiteButton = uibutton(app.UIFigure, 'push');
+            app.OurWebsiteButton.ButtonPushedFcn = createCallbackFcn(app, @OurWebsiteButtonPushed, true);
+            app.OurWebsiteButton.Position = [99 38 158 38];
+            app.OurWebsiteButton.Text = 'Our Website !';
+
+            % Create ReadmeDescriptionButton
+            app.ReadmeDescriptionButton = uibutton(app.UIFigure, 'push');
+            app.ReadmeDescriptionButton.ButtonPushedFcn = createCallbackFcn(app, @ReadmeDescriptionButtonPushed, true);
+            app.ReadmeDescriptionButton.Position = [276 38 158 38];
+            app.ReadmeDescriptionButton.Text = 'Readme Description';
+
+            % Create AcknoledgementButton
+            app.AcknoledgementButton = uibutton(app.UIFigure, 'push');
+            app.AcknoledgementButton.ButtonPushedFcn = createCallbackFcn(app, @AcknoledgementButtonPushed, true);
+            app.AcknoledgementButton.Position = [458 38 158 38];
+            app.AcknoledgementButton.Text = 'Acknoledgement';
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
