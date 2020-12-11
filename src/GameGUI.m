@@ -67,7 +67,7 @@ classdef GameGUI < matlab.apps.AppBase
             sound(xr,fs);
             % make gif visiable
             app.Image.Visible = 'on';
-            pause(1);
+            pause(2);
             app.Image.Visible = 'off';
             
             
@@ -83,19 +83,18 @@ classdef GameGUI < matlab.apps.AppBase
             app.displayDice(points);
             % sp=actxserver('SAPI.SpVoice');
             
-             %app.Image.Visible = 'off';
             
             app.game.updateRound(points);   % send the points of this round to server
             app.game.updateStatus(1);
             app.game.waitForOtherPlayer();
             app.game.updateStatus(0);
-            
+             
             % calculate the global score
-            otherPlayerPoint = app.game.getOtherPlayerRoundPoint();
+            otherPlayerPoint = randi([1,10],1,1); % testing app.game.getOtherPlayerRoundPoint();
             if (points > otherPlayerPoint)
                 app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + points;
             end
-            app.Player2ScoreEditField.Value = app.game.getOtherPlayerScore();   % read other player's score from server
+            app.Player2ScoreEditField.Value = otherPlayerPoint + 100; % testing  app.game.getOtherPlayerScore();   % read other player's score from server
             
             
             
@@ -103,7 +102,7 @@ classdef GameGUI < matlab.apps.AppBase
             % ================================================= enter subgame =================================================================
             winSubgame = false;
             enteredSubgame = false;
-            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,10) == 0   % if get multiple of 10, enter the subgame
+            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,5) == 0   % if get multiple of 10, enter the subgame
                 enteredSubgame = true;
                 subgame = Minesweeper();
                 [xr1,fs1]=audioread('./music/openSubgame.m4a');
@@ -129,13 +128,20 @@ classdef GameGUI < matlab.apps.AppBase
                 end
             end
             
+            % exit program
             if (app.Player1ScoreEditField.Value >=100||app.Player2ScoreEditField.Value >=100)
                 load handel;
                 sound(y,Fs);
+                if app.game.getID() == 1 && app.Player1ScoreEditField.Value >=100
+                    app.Image.ImageSource = './pics/win.jpg';
+                else
+                    app.Image.ImageSource = './pics/lost.jpg';
+                end
+                app.Image.Visible = 'on';
             end
             
             % update scores to the server
-            app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
+            % app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
            
         end
     end
