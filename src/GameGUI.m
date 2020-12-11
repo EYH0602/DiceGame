@@ -13,6 +13,9 @@ classdef GameGUI < matlab.apps.AppBase
         HTML                            matlab.ui.control.HTML
         Player2ScoreEditFieldLabel      matlab.ui.control.Label
         Player2ScoreEditField           matlab.ui.control.NumericEditField
+        YourPlayerIDisButtonGroup       matlab.ui.container.ButtonGroup
+        Player1Button                   matlab.ui.control.ToggleButton
+        Player2Button                   matlab.ui.control.ToggleButton
     end
 
     
@@ -43,6 +46,11 @@ classdef GameGUI < matlab.apps.AppBase
         function init(app)
             app.Play1PreviousRollsListBox.Items = {};
             app.Player1ScoreEditField.Value = 0;
+            
+            % set play 2's ID to 2 is Player Button is selected
+            if app.Player2Button.Value == true
+                app.game = app.game.setID(2);
+            end
         end
 
         % Button pushed function: ROLLButton
@@ -183,6 +191,22 @@ classdef GameGUI < matlab.apps.AppBase
             % Create Player2ScoreEditField
             app.Player2ScoreEditField = uieditfield(app.UIFigure, 'numeric');
             app.Player2ScoreEditField.Position = [410 355 100 22];
+
+            % Create YourPlayerIDisButtonGroup
+            app.YourPlayerIDisButtonGroup = uibuttongroup(app.UIFigure);
+            app.YourPlayerIDisButtonGroup.Title = 'Your Player ID is:';
+            app.YourPlayerIDisButtonGroup.Position = [285 394 196 54];
+
+            % Create Player1Button
+            app.Player1Button = uitogglebutton(app.YourPlayerIDisButtonGroup);
+            app.Player1Button.Text = 'Player 1';
+            app.Player1Button.Position = [1 3 100 22];
+            app.Player1Button.Value = true;
+
+            % Create Player2Button
+            app.Player2Button = uitogglebutton(app.YourPlayerIDisButtonGroup);
+            app.Player2Button.Text = 'Player 2';
+            app.Player2Button.Position = [96 3 100 22];
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';
