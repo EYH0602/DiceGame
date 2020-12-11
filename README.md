@@ -47,7 +47,7 @@ For each round, each round, both players roll their 5 dice. The 5 new rolled dic
 
 * The play will enter the subgame (minesweeper) when their score is a multiple of 10, the other player will be waiting.
 * If the player **solve** the minesweeper subgame, his total score will be ==added by 14==.
-* If the player **fail to solve** the minesweeper, his total score will be ==subtracted by 33==.
+* If the player **fail to solve** the minesweeper, his total score will be ==subtracted by 33==, and the history stack will be clear (i.e. lost all previous record).
 
 ## Usage
 

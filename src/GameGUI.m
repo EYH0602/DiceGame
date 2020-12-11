@@ -140,7 +140,23 @@ classdef GameGUI < matlab.apps.AppBase
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 33;
                     [xr3,fs3]=audioread('./music/failSubgame.m4a');
                     sound(xr3,fs3);
-                    % sp.Speak('Don''t lose heart, keep up the good work');
+                    % sp.Speak('Don''t lose heart, keep up the good work')
+                    app.diceRecord = [];    % erease previous record
+                end
+            end
+            
+            % AI enter subgame
+            if app.Player2ScoreEditField.Value ~= 0 && mod(app.Player2ScoreEditField.Value,10) == 0
+                AI_playSubgameTime = randi([0.5*60,3*60],1,1);    % AI will finish the subgame in 0.5 - 3 minutes
+                AI_winSubgame = logical(randi([0,1],1,1));  % AI win or lose the subgame by random
+                if AI_playSubgameTime < 60          % if the play time is less than 1 min, there is no way to win the subgame
+                    AI_winSubgame = false;
+                end
+                if AI_winSubgame
+                    app.Player2ScoreEditField.Value = app.Player2ScoreEditField.Value + 14;
+                else
+                    app.Player2ScoreEditField.Value = app.Player2ScoreEditField.Value - 33;
+                    app.AI_diceRecord = [];    % erease previous record
                 end
             end
             
