@@ -1,3 +1,5 @@
+% Ethan He
+
 function maxres = lengthOfLIS(nums)
     %% * calculate the points of a given array
     % Input:

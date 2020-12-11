@@ -1,3 +1,5 @@
+% Ethan He
+
 classdef Dice
     properties (Access = private)
         frontFace;   % int 1-6
