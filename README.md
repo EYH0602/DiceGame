@@ -2,6 +2,7 @@
 
 * [Rule](##Rule)
 * [Usage](##Usage)
+* [Single Player Mode](##Single Player Mode)
 
 ## General Description
 
@@ -47,16 +48,34 @@ For each round, each round, both players roll their 5 dice. The 5 new rolled dic
 
 * The play will enter the subgame (minesweeper) when their score is a multiple of 10, the other player will be waiting.
 * If the player **solve** the minesweeper subgame, his total score will be ==added by 14==.
-* If the player **fail to solve** the minesweeper, his total score will be ==subtracted by 33==.
+* If the player **fail to solve** the minesweeper, his total score will be ==subtracted by 33==, and the history stack will be clear (i.e. lost all previous record).
 
 ## Usage
+
+First, enter MATLAB.
+```bash
+matlab              # if your wish to enter MATLAB IDE
+matlab -nodesktop   # just to use the matlab interpreter
+```
+
+Then, in MATLAB environment (IDE or command line interpreter), do one of the following:
 
 ```matlab
 run('Load_On_GUI.m')	% run the GUI version of this game
 run('Load_On_CLI.m')	% run the CLI version of this game, currently not supported
 ```
 
+## Single Player Mode
 
+Since the server communication part does not work perfectly (the contributor of this part Ethan He has been busy for other subject recently), we also have a single player mode ready. In the Single player mode, the second player will be an AI, and the rule will be the same. This AI implication is to show that all other parts expect ThingSpeak are working.
+
+**How to access the Single Player Mode**
+
+```bash
+git checkout SinglePlayerMode
+```
+
+The step after this is the same as multi-player mode.
 
 
 

@@ -131,6 +131,7 @@ classdef GameGUI < matlab.apps.AppBase
                     [xr3,fs3]=audioread('./music/failSubgame.m4a');
                     sound(xr3,fs3);
                     % sp.Speak('Don''t lose heart, keep up the good work');
+                    app.diceRecord = [];    % erease the history stack
                 end
             end
             
