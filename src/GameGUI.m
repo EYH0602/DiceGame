@@ -26,6 +26,8 @@ classdef GameGUI < matlab.apps.AppBase
     properties (Access = private)
         game = DiceGame(1); % game object
         diceRecord = [];    % keep record of all numbers rolled to get points for each round
+        AI = DiceGame(2);   % AI as the second player
+        AI_diceRecord = [];
     end
     
     methods (Access = private)
@@ -69,6 +71,8 @@ classdef GameGUI < matlab.apps.AppBase
             
             % roll all the dice
             app.game = app.game.rollAllDice();
+            app.AI = app.AI.rollAllDice();
+            
             [xr,fs]=audioread('./music/ShakeAndRollDice.mp3'); % init sound
             sound(xr,fs);
             % make gif visiable
@@ -90,17 +94,23 @@ classdef GameGUI < matlab.apps.AppBase
             % sp=actxserver('SAPI.SpVoice');
             
             
-            app.game.updateRound(points);   % send the points of this round to server
-            app.game.updateStatus(1);
-            app.game.waitForOtherPlayer();
-            app.game.updateStatus(0);
+%             app.game.updateRound(points);   % send the points of this round to server
+%             app.game.updateStatus(1);
+%             app.game.waitForOtherPlayer();
+%             app.game.updateStatus(0);
              
-            % calculate the global score
-            otherPlayerPoint = randi([1,10],1,1); % testing app.game.getOtherPlayerRoundPoint();
-            if (points > otherPlayerPoint)
+            % calculate the AI points
+            i = randi([1,5],1,1);
+            num = randi([-10,10],1,1);
+            app.AI = app.AI.setDieFront(i, num + app.AI.getDice(i).getFront());
+            app.AI_diceRecord = [app.AI_diceRecord app.AI.getDiceFronts()];
+            AI_points = lengthOfLIS(app.AI_diceRecord);
+            
+            if points >= AI_points
                 app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + points;
+            else
+                app.Player2ScoreEditField.Value = app.Player2ScoreEditField.Value + AI_points;
             end
-            app.Player2ScoreEditField.Value = otherPlayerPoint + 100; % testing  app.game.getOtherPlayerScore();   % read other player's score from server
             
             
             
@@ -108,7 +118,7 @@ classdef GameGUI < matlab.apps.AppBase
             % ================================================= enter subgame =================================================================
             winSubgame = false;
             enteredSubgame = false;
-            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,5) == 0   % if get multiple of 10, enter the subgame
+            if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,10) == 0   % if get multiple of 10, enter the subgame
                 enteredSubgame = true;
                 subgame = Minesweeper();
                 [xr1,fs1]=audioread('./music/openSubgame.m4a');
