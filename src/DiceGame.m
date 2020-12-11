@@ -50,6 +50,10 @@ classdef DiceGame
             ID = obj.ID;
         end
 
+        function obj = setID(obj, ID_in)
+            obj.ID = ID_in;
+        end
+
         function name = getName(obj)
             name = obj.name;
         end
