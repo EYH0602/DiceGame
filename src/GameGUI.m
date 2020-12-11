@@ -96,11 +96,11 @@ classdef GameGUI < matlab.apps.AppBase
             app.game.updateStatus(0);
              
             % calculate the global score
-            otherPlayerPoint = randi([1,10],1,1); % testing app.game.getOtherPlayerRoundPoint();
+            otherPlayerPoint = app.game.getOtherPlayerRoundPoint();
             if (points > otherPlayerPoint)
                 app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + points;
             end
-            app.Player2ScoreEditField.Value = otherPlayerPoint + 100; % testing  app.game.getOtherPlayerScore();   % read other player's score from server
+            app.Player2ScoreEditField.Value = app.game.getOtherPlayerScore();   % read other player's score from server
             
             
             
@@ -147,7 +147,7 @@ classdef GameGUI < matlab.apps.AppBase
             end
             
             % update scores to the server
-            % app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
+            app.game.updateGlobalScore(app.Player1ScoreEditField.Value);
            
         end
 
