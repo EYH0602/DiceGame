@@ -62,6 +62,7 @@ classdef GameGUI < matlab.apps.AppBase
             
             
             % roll all the dice
+            app.game = app.game.rollAllDice();
             [xr,fs]=audioread('./music/ShakeAndRollDice.mp3'); % init sound
             sound(xr,fs);
             % make gif visiable
