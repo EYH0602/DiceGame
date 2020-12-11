@@ -55,6 +55,9 @@ classdef GameGUI < matlab.apps.AppBase
             if app.Player2Button.Value == true
                 app.game = app.game.setID(2);
             end
+            strTitle = "Your Player ID is: " + string(app.game.getID());
+            app.YourPlayerIDisButtonGroup.Title = convertStringsToChars(strTitle);
+            
             % gif is not shown until roll botton pushed
             app.Image.Visible = 'off';
         end
@@ -162,6 +165,19 @@ classdef GameGUI < matlab.apps.AppBase
         function AcknoledgementButtonPushed(app, event)
             web('https://eyh0602.github.io/DiceGame/acknoledgemen.html')
         end
+
+        % Selection changed function: YourPlayerIDisButtonGroup
+        function YourPlayerIDisButtonGroupSelectionChanged(app, event)
+            selectedButton = app.YourPlayerIDisButtonGroup.SelectedObject;
+            % set play 2's ID to 2 is Player Button is selected
+            if selectedButton == app.Player2Button % app.Player2Button.Value == true
+                app.game = app.game.setID(2);
+            else
+                app.game = app.game.setID(1);
+            end
+            strTitle = "Your Player ID is: " + string(app.game.getID());
+            app.YourPlayerIDisButtonGroup.Title = convertStringsToChars(strTitle);
+        end
     end
 
     % Component initialization
@@ -228,6 +244,7 @@ classdef GameGUI < matlab.apps.AppBase
 
             % Create YourPlayerIDisButtonGroup
             app.YourPlayerIDisButtonGroup = uibuttongroup(app.UIFigure);
+            app.YourPlayerIDisButtonGroup.SelectionChangedFcn = createCallbackFcn(app, @YourPlayerIDisButtonGroupSelectionChanged, true);
             app.YourPlayerIDisButtonGroup.Title = 'Your Player ID is:';
             app.YourPlayerIDisButtonGroup.Position = [285 632 196 54];
 
