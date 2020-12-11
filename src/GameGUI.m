@@ -51,12 +51,7 @@ classdef GameGUI < matlab.apps.AppBase
             
             
             % roll all the dice
-            currPath = pwd; % identify the current working directory to avoid wrong path to sound file
-            pathToSoundFile = './music/ShakeAndRollDice.mp3';
-            if string(currPath(end-2:end)) == "src"
-                pathToSoundFile = '../music/ShakeAndRollDice.mp3';
-            end
-            [xr,fs]=audioread(pathToSoundFile); % init sound
+            [xr,fs]=audioread('./music/ShakeAndRollDice.mp3'); % init sound
             sound(xr,fs);
             app.game = app.game.rollAllDice();
             
@@ -91,9 +86,10 @@ classdef GameGUI < matlab.apps.AppBase
             winSubgame = false;
             enteredSubgame = false;
             if app.Player1ScoreEditField.Value ~= 0 && mod(app.Player1ScoreEditField.Value,10) == 0   % if get multiple of 10, enter the subgame
-                sp.Speak('Minesweeper starts. Good luck');
                 enteredSubgame = true;
                 subgame = Minesweeper();
+                [xr1,fs1]=audioread('./music/openSubgame.m4a');
+                sound(xr1,fs1);
                 while ~subgame.isGameOver % wait until the subgame is finished
                     % display Minesweeper GUI
                     drawnow;
@@ -104,10 +100,14 @@ classdef GameGUI < matlab.apps.AppBase
             if enteredSubgame
                 if winSubgame
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + 14;
-                    sp.Speak('Nice，You did a great job');
+                    [xr2,fs2]=audioread('./music/successSubgame.m4a');
+                    sound(xr2,fs2);
+                    % sp.Speak('Nice，You did a great job');
                 else
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 33;
-                    sp.Speak('Don''t lose heart, keep up the good work');
+                    [xr3,fs3]=audioread('./music/failSubgame.m4a');
+                    sound(xr3,fs3);
+                    % sp.Speak('Don''t lose heart, keep up the good work');
                 end
             end
             
