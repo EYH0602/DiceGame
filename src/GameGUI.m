@@ -125,7 +125,7 @@ classdef GameGUI < matlab.apps.AppBase
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value + 14;
                     [xr2,fs2]=audioread('./music/successSubgame.m4a');
                     sound(xr2,fs2);
-                    % sp.Speak('Niceï¼ŒYou did a great job');
+                    % sp.Speak('NiceÿYou did a great job');
                 else
                     app.Player1ScoreEditField.Value = app.Player1ScoreEditField.Value - 33;
                     [xr3,fs3]=audioread('./music/failSubgame.m4a');
@@ -164,7 +164,7 @@ classdef GameGUI < matlab.apps.AppBase
 
         % Button pushed function: AcknoledgementButton
         function AcknoledgementButtonPushed(app, event)
-            web('https://eyh0602.github.io/DiceGame/acknoledgemen.html')
+            web('https://eyh0602.github.io/DiceGame/acknowledgement.html')
         end
 
         % Selection changed function: YourPlayerIDisButtonGroup
